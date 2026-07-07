@@ -21,15 +21,19 @@ import AdminLayout from "./features/admin/layouts/AdminLayout";
 
 import AdminProtectedRoute from "./features/admin/routes/AdminProtectedRoute";
 import DashboardPage from "./features/admin/pages/admin/DashboardPage";
+import ShopPage from "./pages/shop/ShopPage";
+import WishlistProvider from "./context/Wishlist/WishlistProvider";
 
 function App() {
   return (
     <AuthProvider>
+      <WishlistProvider>
       <CartProvider>
         <BrowserRouter>
           <Routes>
             <Route element={<CustomerLayout />}>
               <Route path="/" element={<HomePage />} />
+              <Route path="/shop" element={<ShopPage />} />
               <Route path="/product/:id" element={<ProductDetailPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/login" element={<LoginPage />} />
@@ -51,6 +55,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </CartProvider>
+      </WishlistProvider>
     </AuthProvider>
   );
 }
