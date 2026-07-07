@@ -1,4 +1,4 @@
-import { FiShoppingCart } from "react-icons/fi";
+import { FiCpu } from "react-icons/fi";
 
 interface Props {
   onClick: () => void;
@@ -8,10 +8,19 @@ const Logo = ({ onClick }: Props) => {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-2 text-white font-semibold text-lg focus:outline-none"
+      aria-label="Go to homepage"
+      className="
+            w-10
+          h-10
+          rounded-xl
+          bg-primary
+          flex
+          items-center
+          justify-center
+          text-white
+      "
     >
-      <FiShoppingCart className="text-2xl" />
-      <span className="hidden sm:block">Shop</span>
+      <FiCpu className="text-2xl" />
     </button>
   );
 };

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { FiUser } from "react-icons/fi";
 
 interface Props {
   username: string | null;
@@ -6,18 +7,16 @@ interface Props {
   onOrders: () => void;
 }
 
-const getInitial = (username: string | null) =>
-  username ? username.charAt(0).toUpperCase() : "?";
-
 const UserMenu = ({ username, onLogout, onOrders }: Props) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  //  dışarı tıklayınca kapan
+  const close = () => setOpen(false);
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
+        close();
       }
     };
 
@@ -25,10 +24,9 @@ const UserMenu = ({ username, onLogout, onOrders }: Props) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ESC ile kapatma
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") close();
     };
 
     document.addEventListener("keydown", handleEsc);
@@ -38,20 +36,42 @@ const UserMenu = ({ username, onLogout, onOrders }: Props) => {
   return (
     <div className="relative" ref={ref}>
       <button
-        onClick={() => setOpen((prev) => !prev)}
-        className="w-9 h-9 rounded-full bg-white text-primary flex items-center justify-center font-semibold hover:scale-105 transition focus:outline-none focus:ring-2 focus:ring-white"
+        onClick={() => setOpen((p) => !p)}
+        className="
+          w-10 h-10
+          rounded-xl
+          bg-background
+          text-textPrimary
+          flex items-center justify-center
+          hover:bg-border
+          transition
+        "
       >
-        {getInitial(username)}
+        <FiUser className="text-xl" />
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-md overflow-hidden animate-fadeIn">
+        <div
+          className="
+            absolute right-0 mt-3
+            w-44 bg-white
+            border border-border
+            rounded-xl
+            shadow-dropdown
+            overflow-hidden
+            animate-fadeIn
+          "
+        >
+          <div className="px-4 py-3 border-b border-border text-sm font-medium">
+            {username ?? "Guest"}
+          </div>
+
           <button
             onClick={() => {
               onOrders();
-              setOpen(false);
+              close();
             }}
-            className="w-full text-left px-4 py-2 hover:bg-gray-100"
+            className="w-full text-left px-4 py-3 hover:bg-background text-sm"
           >
             My Orders
           </button>
@@ -59,9 +79,9 @@ const UserMenu = ({ username, onLogout, onOrders }: Props) => {
           <button
             onClick={() => {
               onLogout();
-              setOpen(false);
+              close();
             }}
-            className="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
+            className="w-full text-left px-4 py-3 text-danger hover:bg-background text-sm"
           >
             Logout
           </button>

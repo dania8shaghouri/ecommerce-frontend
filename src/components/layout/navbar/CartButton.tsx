@@ -6,19 +6,59 @@ interface Props {
   active?: boolean;
 }
 
+const formatCartCount = (count: number) => {
+  return count > 99 ? "99+" : count;
+};
+
 const CartButton = ({ count, onClick, active }: Props) => {
+  const hasItems = count > 0;
+
   return (
     <button
+      type="button"
       onClick={onClick}
-      className={`relative hover:scale-110 transition focus:outline-none focus:ring-2 focus:ring-white ${
-        active ? "text-red-950" : "text-white"
-      }`}
+      aria-label="Shopping cart"
+      aria-busy={false}
+      className={`
+        relative
+        flex
+        items-center
+        justify-center
+        w-10
+        h-10
+        rounded-xl
+        transition
+        hover:bg-background
+        hover:scale-105
+        focus:outline-none
+        focus-visible:ring-2
+        focus-visible:ring-primary
+
+        ${active ? "text-primary bg-background" : "text-textPrimary"}
+      `}
     >
-      <FiShoppingCart className="text-2xl" />
-      {/* 99 veriyi küçültüp UI’yi korumak için */}
-      {count > 0 && (
-        <span className="absolute -top-2 -right-2 bg-white text-primary text-xs min-w-[20px] h-5 px-1 flex items-center justify-center rounded-full">
-          {count > 99 ? "99+" : count}
+      <FiShoppingCart className="text-xl" />
+
+      {hasItems && (
+        <span
+          aria-label={`Cart items: ${count}`}
+          className="
+            absolute
+            -top-1
+            -right-1
+            bg-primary
+            text-white
+            text-xs
+            font-bold
+            w-5
+            h-5
+            rounded-full
+            flex
+            items-center
+            justify-center
+          "
+        >
+          {formatCartCount(count)}
         </span>
       )}
     </button>

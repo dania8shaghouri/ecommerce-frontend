@@ -1,0 +1,182 @@
+.categorySwiper {
+  padding-top: 40px;
+  padding-bottom: 120px;
+}
+
+.categorySwiper .swiper-slide {
+  transition: all 0.45s ease;
+  opacity: 0.25;
+  transform: scale(0.82);
+}
+
+.categorySwiper .swiper-slide-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.categorySwiper .swiper-slide-prev,
+.categorySwiper .swiper-slide-next {
+  opacity: 0.7;
+}
+
+.categorySwiper .swiper-pagination {
+  bottom: 20px !important;
+}
+
+.categorySwiper .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  opacity: 1;
+  background: #cbd5e1;
+}
+
+.categorySwiper .swiper-pagination-bullet-active {
+  width: 32px;
+  border-radius: 999px;
+  background: #006ce1;
+}
+
+.categorySwiper .swiper-wrapper {
+  align-items: center;
+}
+
+/* ----------------------------- */
+/* ORBIT */
+/* ----------------------------- */
+
+/* .orbit-container {
+  position: absolute;
+
+  left: 50%;
+  top: 63%;
+
+  transform: translate(-50%, -50%);
+
+  width: 900px;
+  height: 900px;
+
+  pointer-events: none;
+}
+
+.orbit {
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: 9999px;
+}
+
+.orbit-1 {
+  animation: orbitRotate 42s linear infinite;
+
+  background: conic-gradient(
+    transparent 0deg,
+    rgba(0, 108, 225, 0.12) 40deg,
+    transparent 80deg,
+    transparent 160deg,
+    rgba(0, 108, 225, 0.1) 220deg,
+    transparent 260deg,
+    transparent 360deg
+  );
+
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 2px),
+    #000 calc(100% - 2px)
+  );
+
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 2px),
+    #000 calc(100% - 2px)
+  );
+}
+
+.orbit-2 {
+  inset: 80px;
+
+  animation: orbitRotateReverse 28s linear infinite;
+
+  background: conic-gradient(
+    transparent,
+    rgba(14, 165, 233, 0.1),
+    transparent,
+    transparent,
+    rgba(14, 165, 233, 0.08),
+    transparent
+  );
+
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 2px),
+    #000 calc(100% - 2px)
+  );
+
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 2px),
+    #000 calc(100% - 2px)
+  );
+} */
+
+/* .orbitLine {
+  position: absolute;
+
+  left: 50%;
+
+  bottom: 18px;
+
+  transform: translateX(-50%);
+
+  width: 170px;
+
+  height: 18px;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+}
+
+.orbitLine::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: 999px;
+
+  border: 1.8px solid rgba(0, 108, 225, 0.22);
+}
+
+.orbitLight {
+  position: absolute;
+
+  left: -40px;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 40px;
+
+  height: 40px;
+
+  border-radius: 50%;
+
+  background: #3ea6ff;
+
+  filter: blur(10px);
+
+  animation: orbitMove 2.8s linear infinite;
+} */
+
+@keyframes orbitMove {
+  0% {
+    left: -35px;
+  }
+
+  100% {
+    left: 170px;
+  }
+}
