@@ -1,4 +1,4 @@
-import ProductImage from "../../../../../ecommerce-backend/src/images/prdct.png";
+import ProductImage from "../../../assets/heroimg/prdct.png";
 
 export interface HeroSlideType {
   id: string;
