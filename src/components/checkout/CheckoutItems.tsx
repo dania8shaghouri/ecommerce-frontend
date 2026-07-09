@@ -31,9 +31,7 @@ const CheckoutItems = ({ items }: Props) => {
           <span>₺{item.unitPrice}</span>
           <span>{item.quantity}</span>
 
-          <span className="text-right">
-            ₺{item.unitPrice * item.quantity}
-          </span>
+          <span className="text-right">₺{item.unitPrice * item.quantity}</span>
         </div>
       ))}
     </div>

@@ -17,7 +17,7 @@ const WishlistButton = ({ productId }: Props) => {
   const handleClick = () => {
     if (!isAuthenticated) {
       toast("Please login to use wishlist ❤️", {
-        icon: "🔒",
+        
       });
 
       return;

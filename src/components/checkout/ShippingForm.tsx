@@ -96,9 +96,7 @@ const ShippingForm = ({ onSubmit }: Props) => {
             <Input
               placeholder="MM/YY"
               {...register("expiry")}
-              onChange={(e) =>
-                setValue("expiry", formatExpiry(e.target.value))
-              }
+              onChange={(e) => setValue("expiry", formatExpiry(e.target.value))}
             />
             <p className="error">{errors.expiry?.message}</p>
           </div>

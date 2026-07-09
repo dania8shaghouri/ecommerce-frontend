@@ -71,7 +71,8 @@ import useOrbitDrag from "./hooks/useOrbitDrag";
 
 import Orbit from "./Orbit";
 import OrbitItem from "./OrbitItem";
-import {useCategories} from "../../../hooks/useCategories";
+import { useCategories } from "../../../hooks/useCategories";
+import OrbitSkeleton from "./OrbitSkeleton";
 
 const RADIUS_X = 330;
 const RADIUS_Y = 95;
@@ -109,7 +110,7 @@ const OrbitCarousel = () => {
   });
 
   if (loading) {
-    return null;
+    return <OrbitSkeleton />;
   }
   return (
     <div
