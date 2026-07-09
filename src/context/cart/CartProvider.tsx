@@ -55,7 +55,10 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) {
+      resetCart();
+      return;
+    }
 
     syncCart();
   }, [token]);
