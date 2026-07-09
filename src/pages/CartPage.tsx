@@ -1,15 +1,23 @@
-import { useCart } from "../context/Auth/cart/CartContext";
+import { useCart } from "../context/cart/CartContext";
 import { useNavigate } from "react-router-dom";
 import CartItemCard from "../components/cart/CartItemCard";
 import CartSummary from "../components/cart/CartSummary";
 import { FiTrash2 } from "react-icons/fi";
 
 const CartPage = () => {
-  const { cartItems, totalAmount, updateItemQuantity, removeItemFromCart, clearCart } = useCart();
+  const {
+    cartItems,
+    totalAmount,
+    updateItemQuantity,
+    removeItemFromCart,
+    clearCart,
+  } = useCart();
   const navigate = useNavigate();
 
   if (cartItems.length === 0) {
-    return <div className="h-[70vh] flex items-center justify-center">Sepet boş</div>;
+    return (
+      <div className="h-[70vh] flex items-center justify-center">Sepet boş</div>
+    );
   }
 
   return (
