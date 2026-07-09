@@ -2,9 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply bg-background text-textPrimary;
+
+    font-family: Inter, system-ui, sans-serif;
+  }
+}
 
 @layer components {
   .error {
     @apply text-red-500 text-sm mt-1;
   }
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #006ce1;
+  transform: scale(0.75);
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #0059b3;
+}
+
+.swiper {
+  padding-bottom: 1px;
+}
+
+.swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: #cbd5e1;
+  opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+  background: #006ce1;
 }
