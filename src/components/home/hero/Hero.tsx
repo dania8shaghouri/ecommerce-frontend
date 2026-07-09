@@ -8,7 +8,7 @@ const Hero = () => {
         <div className="grid lg:grid-cols-2 items-center gap-8 xl:gap-12">
           <HeroContent />
 
-          <div className="lg:translate-x-8">
+          <div className="w-full min-w-0 lg:translate-x-8">
             <HeroSlider />
           </div>
         </div>
