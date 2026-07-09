@@ -86,19 +86,13 @@
 
 // export default MyOrdersPage;
 
-
-import { useEffect } from "react";
-import { useAuth } from "../context/Auth/AuthContext";
+import { useOrder } from "../context/Order/OrderContext";
 import Loading from "../components/ui/Loading";
 import EmptyState from "../components/ui/EmptyState";
 import OrderCard from "../components/orders/OrderCard";
 
 const MyOrdersPage = () => {
-  const { getMyOrders, orders, ordersLoading } = useAuth();
-
-  useEffect(() => {
-    getMyOrders();
-  }, []);
+  const { orders, ordersLoading } = useOrder();
 
   if (ordersLoading) return <Loading />;
 
