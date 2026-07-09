@@ -14,11 +14,12 @@ const WishlistButton = ({ productId }: Props) => {
 
   const { isWishlisted, toggleWishlist } = useWishlist();
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (!isAuthenticated) {
-      toast("Please login to use wishlist ❤️", {
-        
-      });
+      toast("Please login to use wishlist ❤️");
 
       return;
     }
