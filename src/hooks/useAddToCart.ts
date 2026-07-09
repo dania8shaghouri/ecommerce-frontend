@@ -1,4 +1,4 @@
-import { useCart } from "../context/Auth/cart/CartContext";
+import { useCart } from "../context/cart/CartContext";
 import type { Product } from "../types/Product";
 
 export const useAddToCart = () => {

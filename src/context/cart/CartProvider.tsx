@@ -1,14 +1,14 @@
 import { useEffect, useState, type FC, type PropsWithChildren } from "react";
 import { CartContext } from "./CartContext";
-import type { CartItem } from "../../../types/CartItem";
-import { useAuth } from "../AuthContext";
+import type { CartItem } from "../../types/CartItem";
+import { useAuth } from "../Auth/AuthContext";
 import {
   getCart,
   addToCart,
   updateCartItem,
   removeCartItem,
   clearCartRequest,
-} from "../../../services/cartService";
+} from "../../services/cartService";
 import toast from "react-hot-toast";
 
 const CartProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -42,30 +42,27 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
   const syncCart = async () => {
     if (!token) return;
 
-    const { data } = await getCart(token);
+    const { data } = await getCart();
     const backendCart = data as BackendCart;
 
     setCartItems(backendCart.items.map(mapBackendItem));
     setTotalAmount(backendCart.totalAmount);
   };
 
+  const resetCart = () => {
+    setCartItems([]);
+    setTotalAmount(0);
+  };
+
   useEffect(() => {
     if (!token) return;
 
-    const fetchCart = async () => {
-      const { data } = await getCart(token);
-      const backendCart = data as BackendCart;
-
-      setCartItems(backendCart.items.map(mapBackendItem));
-      setTotalAmount(backendCart.totalAmount);
-    };
-
-    fetchCart();
+    syncCart();
   }, [token]);
 
   const addItemToCart = async (item: CartItem) => {
     try {
-      await addToCart(token!, {
+      await addToCart({
         productId: item.productId,
         quantity: item.quantity,
       });
@@ -80,7 +77,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const updateItemQuantity = async (productId: string, quantity: number) => {
     try {
-      await updateCartItem(token!, { productId, quantity });
+      await updateCartItem({ productId, quantity });
       await syncCart();
       toast.success("Cart updated");
     } catch {
@@ -90,7 +87,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const removeItemFromCart = async (productId: string) => {
     try {
-      await removeCartItem(token!, productId);
+      await removeCartItem(productId);
 
       await syncCart();
 
@@ -102,10 +99,8 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const clearCart = async () => {
     try {
-      await clearCartRequest(token!);
-
-      setCartItems([]);
-      setTotalAmount(0);
+      await clearCartRequest();
+      resetCart();
 
       toast.success("Cart cleared");
     } catch {
@@ -122,6 +117,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         clearCart,
         updateItemQuantity,
         removeItemFromCart,
+        resetCart,
       }}
     >
       {children}

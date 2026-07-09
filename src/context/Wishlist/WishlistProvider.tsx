@@ -13,9 +13,7 @@ import {
 
 const WishlistProvider: FC<PropsWithChildren> = ({ children }) => {
   const { token } = useAuth();
-
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
-
   const [loading, setLoading] = useState(false);
 
   const fetchWishlist = async () => {
@@ -24,7 +22,7 @@ const WishlistProvider: FC<PropsWithChildren> = ({ children }) => {
     try {
       setLoading(true);
 
-      const { data } = await getWishlist(token);
+      const { data } = await getWishlist();
 
       setWishlist(data);
     } catch {
@@ -46,7 +44,7 @@ const WishlistProvider: FC<PropsWithChildren> = ({ children }) => {
     if (!token) return;
 
     try {
-      const { data } = await toggleWishlistRequest(token, productId);
+      const { data } = await toggleWishlistRequest(productId);
 
       await fetchWishlist();
 

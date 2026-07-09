@@ -1,8 +1,6 @@
-import { useState, type FC, type PropsWithChildren } from "react";
+import { useEffect, useState, type FC, type PropsWithChildren } from "react";
+import { setLogoutHandler } from "../../utils/auth";
 import { AuthContext } from "./AuthContext";
-import axios from "axios";
-import { BASE_URL } from "../../constants/baseUrl";
-import type { Order } from "../../types/order";
 
 const USERNAME_KEY = "username";
 const TOKEN_KEY = "token";
@@ -18,9 +16,6 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [role, setRole] = useState<"customer" | "admin" | null>(
     localStorage.getItem("role") as "customer" | "admin" | null,
   );
-
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [ordersLoading, setOrdersLoading] = useState(false);
 
   const isAuthenticated = Boolean(token);
 
@@ -46,27 +41,9 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem("role");
   };
-
-  const getMyOrders = async () => {
-    if (!token) return;
-
-    setOrdersLoading(true);
-
-    try {
-      const { data } = await axios.get(`${BASE_URL}/user/my-orders`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setOrders(data);
-    } catch (error) {
-      console.error("Failed to fetch orders:", error);
-      setOrders([]);
-    } finally {
-      setOrdersLoading(false);
-    }
-  };
+  useEffect(() => {
+    setLogoutHandler(logout);
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -77,9 +54,6 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         isAuthenticated,
         login,
         logout,
-        orders,
-        ordersLoading,
-        getMyOrders,
       }}
     >
       {children}
