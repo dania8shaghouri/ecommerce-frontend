@@ -11,12 +11,15 @@ const ProductGallery = ({ product }: ProductGalleryProps) => {
   const images = product.images.length > 0 ? product.images : [product.image];
 
   const [mainImage, setMainImage] = useState(images[0]);
-
   const [zoom, setZoom] = useState(false);
   const [position, setPosition] = useState({
     x: 50,
     y: 50,
   });
+
+  const canHover = window.matchMedia(
+    "(hover: hover) and (pointer: fine)",
+  ).matches;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const { left, top, width, height } =
@@ -66,9 +69,21 @@ const ProductGallery = ({ product }: ProductGalleryProps) => {
 
       {/* Main Image */}
       <div
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setZoom(true)}
-        onMouseLeave={() => setZoom(false)}
+        onMouseMove={(e) => {
+          if (canHover) {
+            handleMouseMove(e);
+          }
+        }}
+        onMouseEnter={() => {
+          if (canHover) {
+            setZoom(true);
+          }
+        }}
+        onMouseLeave={() => {
+          if (canHover) {
+            setZoom(false);
+          }
+        }}
         className="
     w-full
     max-w-[650px]
@@ -96,7 +111,7 @@ const ProductGallery = ({ product }: ProductGalleryProps) => {
     duration-200
   "
           style={{
-            transform: zoom ? "scale(2)" : "scale(1)",
+            transform: zoom && canHover ? "scale(2)" : "scale(1)",
             transformOrigin: `${position.x}% ${position.y}%`,
           }}
         />

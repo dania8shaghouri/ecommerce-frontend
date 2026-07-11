@@ -2,7 +2,10 @@ import OrbitCarousel from "./OrbitCarousel";
 
 const Categories = () => {
   return (
-    <section className="relative py-28 bg-background overflow-hidden">
+    <section
+      id="categories"
+      className="relative py-28 bg-background overflow-hidden"
+    >
       {/* Background Blur */}
       <div className="absolute -left-40 top-20 w-[420px] h-[420px] rounded-full bg-primary/10 blur-[120px]" />
 

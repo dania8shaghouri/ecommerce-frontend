@@ -16,7 +16,7 @@ type HeaderProps = {
 
 const NAV_ITEMS = [
   { label: "Shop", path: "/shop" },
-  { label: "Categories", path: "/categories" },
+  { label: "Categories", path: "/#categories" },
   { label: "Brands", path: "/brands" },
   { label: "Deals", path: "/deals" },
 ];
@@ -27,7 +27,22 @@ export default function Header({ setMenuOpen }: HeaderProps) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const go = (path: string) => navigate(path);
+  // const go = (path: string) => navigate(path);
+  const go = (path: string) => {
+    if (path === "/#categories") {
+      if (pathname === "/") {
+        document
+          .getElementById("categories")
+          ?.scrollIntoView({ behavior: "smooth" });
+      } else {
+        navigate("/#categories");
+      }
+
+      return;
+    }
+
+    navigate(path);
+  };
 
   const handleLogout = () => {
     resetCart();
