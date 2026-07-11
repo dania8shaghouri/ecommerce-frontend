@@ -1,10 +1,14 @@
-import { useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../constants/baseUrl";
-// import { useAuth } from "../context/Auth/AuthContext";z
 import { useNavigate } from "react-router-dom";
 import { useRequest } from "../hooks/useRequest";
 import ErrorState from "../components/ui/ErrorState";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  registerSchema,
+  type RegisterFormData,
+} from "../validation/registerSchema";
 
 type RegisterResponse = {
   token: string;
@@ -12,26 +16,11 @@ type RegisterResponse = {
 };
 
 const RegisterPage = () => {
-  // const { login } = useAuth();
   const navigate = useNavigate();
 
   const { loading, error, run } = useRequest<RegisterResponse>();
 
-  const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const submitRegister = () => {
+  const submitRegister = (form: RegisterFormData) => {
     return run(
       async () => {
         const res = await axios.post<RegisterResponse>(
@@ -41,59 +30,77 @@ const RegisterPage = () => {
 
         return res.data;
       },
-      (data) => {
-        console.log(data);
-        // login(form.email, data.token, "customer");
+      () => {
         navigate("/login", {
-          state: { message: "Registration successful, please login" },
+          state: {
+            message: "Registration successful, please login",
+          },
         });
       },
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    submitRegister();
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    mode: "onBlur",
+  });
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-6 text-center">Register</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(submitRegister)} className="space-y-4">
           <input
-            name="firstName"
-            value={form.firstName}
-            onChange={handleChange}
+            {...register("firstName")}
             placeholder="First Name"
             className="w-full p-3 border rounded"
           />
 
+          {errors.firstName && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.firstName.message}
+            </p>
+          )}
+
           <input
-            name="lastName"
-            value={form.lastName}
-            onChange={handleChange}
+            {...register("lastName")}
             placeholder="Last Name"
             className="w-full p-3 border rounded"
           />
 
+          {errors.lastName && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.lastName.message}
+            </p>
+          )}
+
           <input
-            name="email"
-            value={form.email}
-            onChange={handleChange}
+            {...register("email")}
             placeholder="Email"
             className="w-full p-3 border rounded"
           />
 
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+          )}
+
           <input
-            name="password"
+            {...register("password")}
             type="password"
-            value={form.password}
-            onChange={handleChange}
             placeholder="Password"
             className="w-full p-3 border rounded"
           />
+
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </p>
+          )}
 
           <button
             disabled={loading}
@@ -103,7 +110,7 @@ const RegisterPage = () => {
           </button>
         </form>
 
-        {error && <ErrorState message={error} onRetry={submitRegister} />}
+        {error && <ErrorState message={error} />}
       </div>
     </div>
   );

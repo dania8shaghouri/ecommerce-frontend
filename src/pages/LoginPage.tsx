@@ -1,10 +1,13 @@
-import { useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../constants/baseUrl";
 import { useAuth } from "../context/Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useRequest } from "../hooks/useRequest";
 import ErrorState from "../components/ui/ErrorState";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { loginSchema, type LoginFormData } from "../validation/loginSchema";
 
 type LoginResponse = {
   token: string;
@@ -17,20 +20,16 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const { loading, error, run } = useRequest<LoginResponse>();
-
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: "onBlur",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const submitLogin = () => {
+  const submitLogin = (form: LoginFormData) => {
     return run(
       async () => {
         const res = await axios.post<LoginResponse>(
@@ -41,13 +40,9 @@ const LoginPage = () => {
         return res.data;
       },
       (data) => {
-        console.log("LOGIN:", data);
-
         login(form.email, data.token, data.role ?? "customer");
 
-        const role = data.role ?? "customer";
-
-        if (role === "admin") {
+        if (data.role === "admin") {
           navigate("/admin/dashboard");
         } else {
           navigate("/");
@@ -56,33 +51,34 @@ const LoginPage = () => {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    submitLogin();
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4">Login</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(submitLogin)} className="space-y-4">
           <input
-            name="email"
-            value={form.email}
-            onChange={handleChange}
+            {...register("email")}
             placeholder="Email"
             className="w-full p-3 border rounded"
           />
 
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+          )}
+
           <input
-            name="password"
+            {...register("password")}
             type="password"
-            value={form.password}
-            onChange={handleChange}
             placeholder="Password"
             className="w-full p-3 border rounded"
           />
+
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </p>
+          )}
 
           <button
             disabled={loading}
@@ -102,7 +98,7 @@ const LoginPage = () => {
           </button>
         </div>
 
-        {error && <ErrorState message={error} onRetry={submitLogin} />}
+        {error && <ErrorState message={error} />}
       </div>
     </div>
   );
