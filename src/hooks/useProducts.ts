@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-
+import { useSearchParams } from "react-router-dom";
 import type { Product } from "../types/Product";
 import { getProducts } from "../services/productService";
 import { useShopFilter } from "../context/shop/ShopFilterContext";
@@ -9,6 +9,9 @@ export const useProducts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { filters } = useShopFilter();
+  const [searchParams] = useSearchParams();
+
+  const search = searchParams.get("search") ?? "";
 
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,8 +23,8 @@ export const useProducts = () => {
       setError(null);
 
       // const data = await getProducts(filters);
-
-      const data = await getProducts(filters);
+      // await new Promise((resolve) => setTimeout(resolve, 3000));
+      const data = await getProducts(filters, search);
 
       console.log({
         totalProducts: data.totalProducts,
@@ -41,7 +44,7 @@ export const useProducts = () => {
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [filters, search]);
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);

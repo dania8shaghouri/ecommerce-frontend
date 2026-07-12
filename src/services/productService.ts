@@ -4,6 +4,7 @@ import type { ShopFilters } from "../types/Filter";
 
 export const getProducts = async (
   filters?: ShopFilters,
+  search: string = "",
 ): Promise<ProductsResponse> => {
   const params = new URLSearchParams();
 
@@ -31,6 +32,9 @@ export const getProducts = async (
 
   if (filters?.page) {
     params.set("page", String(filters.page));
+  }
+  if (search.trim()) {
+    params.set("search", search.trim());
   }
   const { data } = await api.get<ProductsResponse>(
     `/product?${params.toString()}`,
