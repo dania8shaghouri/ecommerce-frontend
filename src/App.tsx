@@ -24,6 +24,8 @@ import AdminProtectedRoute from "./features/admin/routes/AdminProtectedRoute";
 import DashboardPage from "./features/admin/pages/admin/DashboardPage";
 import WishlistProvider from "./context/Wishlist/WishlistProvider";
 import OrderProvider from "./context/Order/OrderProvider";
+import ProductFormPage from "./features/admin/pages/admin/ProductFormPage";
+import ProductsPage from "./features/admin/pages/admin/ProductsPage";
 
 function App() {
   return (
@@ -52,9 +54,18 @@ function App() {
                   </Route>
                 </Route>
                 {/* admin layout */}
-                <Route element={<AdminProtectedRoute />}>
+               <Route element={<AdminProtectedRoute />}>
                   <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<DashboardPage />} />
+                    <Route path="products" element={<ProductsPage />} />
+                    <Route
+                      path="products/new"
+                      element={<ProductFormPage />}
+                    />{" "}
+                    <Route
+                      path="products/:id/edit"
+                      element={<ProductFormPage />}
+                    />
                   </Route>
                 </Route>
               </Routes>
