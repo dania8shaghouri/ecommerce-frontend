@@ -1,7 +1,7 @@
 import type { AdminProduct } from "../../types/adminProduct";
 import { getImageUrl } from "../../../../utils/getImageUrl";
 import EmptyState from "../../../../components/ui/EmptyState";
-import ProductsPagination from "./ProductsPagination";
+import ProductsPagination from "../../../../components/ui/Paigination";
 import ProductActionsMenu from "./ProductActionsMenu";
 interface Props {
   products: AdminProduct[];
@@ -32,7 +32,7 @@ const ProductsTable = ({
   limit,
   onPageChange,
   onEdit,
-  onDelete
+  onDelete,
 }: Props) => {
   if (products.length === 0) {
     return (
@@ -120,9 +120,10 @@ const ProductsTable = ({
       <ProductsPagination
         currentPage={currentPage}
         totalPages={totalPages}
-        totalProducts={totalProducts}
+        totalItems={totalProducts}
         limit={limit}
         onPageChange={onPageChange}
+        itemLabel="products"
       />
     </div>
   );

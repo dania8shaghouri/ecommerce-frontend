@@ -22,10 +22,13 @@ import AdminLayout from "./features/admin/layouts/AdminLayout";
 
 import AdminProtectedRoute from "./features/admin/routes/AdminProtectedRoute";
 import DashboardPage from "./features/admin/pages/admin/DashboardPage";
+import ProductsPage from "./features/admin/pages/admin/ProductsPage";
+import OrdersPage from "./features/admin/pages/admin/OrdersPage";
+import OrderDetailPage from "./features/admin/pages/admin/OrderDetailPage";
+
 import WishlistProvider from "./context/Wishlist/WishlistProvider";
 import OrderProvider from "./context/Order/OrderProvider";
 import ProductFormPage from "./features/admin/pages/admin/ProductFormPage";
-import ProductsPage from "./features/admin/pages/admin/ProductsPage";
 
 function App() {
   return (
@@ -54,7 +57,7 @@ function App() {
                   </Route>
                 </Route>
                 {/* admin layout */}
-               <Route element={<AdminProtectedRoute />}>
+                <Route element={<AdminProtectedRoute />}>
                   <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="products" element={<ProductsPage />} />
@@ -66,6 +69,8 @@ function App() {
                       path="products/:id/edit"
                       element={<ProductFormPage />}
                     />
+                    <Route path="orders" element={<OrdersPage />} />
+                    <Route path="orders/:id" element={<OrderDetailPage />} />
                   </Route>
                 </Route>
               </Routes>
