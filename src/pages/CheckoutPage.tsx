@@ -1,7 +1,5 @@
 import { useCart } from "../context/cart/CartContext";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-// import { useAuth } from "../context/Auth/AuthContext";
 import toast from "react-hot-toast";
 import { checkoutRequest } from "../services/cartService";
 import Loading from "../components/ui/Loading";
@@ -10,9 +8,7 @@ import ShippingForm from "../components/checkout/ShippingForm";
 import type { CheckoutFormData } from "../validation/checkoutSchema";
 
 const CheckoutPage = () => {
-  const { cartItems, totalAmount, clearCart } = useCart();
-  // const { token } = useAuth();
-  const navigate = useNavigate();
+  const { cartItems, totalAmount } = useCart();
 
   const [loading, setLoading] = useState(false);
 
@@ -20,17 +16,11 @@ const CheckoutPage = () => {
     setLoading(true);
 
     try {
-      await checkoutRequest({
-        shipping: data,
-      });
-
-      await clearCart();
-
-      toast.success("Order placed successfully");
-      navigate("/order-success");
+      const response = await checkoutRequest({ shipping: data });
+      const { checkoutUrl } = response.data;
+      window.location.href = checkoutUrl;
     } catch {
       toast.error("Checkout failed");
-    } finally {
       setLoading(false);
     }
   };

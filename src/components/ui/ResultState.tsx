@@ -8,6 +8,7 @@ interface Props {
   buttonText: string;
   onClick: () => void;
   color?: Color;
+  children?: React.ReactNode;
 }
 
 const colorMap = {
@@ -27,21 +28,21 @@ const ResultState = ({
   buttonText,
   onClick,
   color = "green",
+  children,
 }: Props) => {
   const selectedColor = colorMap[color];
 
   return (
     <div className="flex flex-col items-center justify-center h-[70vh] gap-6 text-center">
-      
       <div
         className={`w-16 h-16 flex items-center justify-center rounded-full ${selectedColor.bg}`}
       >
         <Icon className={`w-8 h-8 ${selectedColor.text}`} />
       </div>
 
-      <h1 className="text-2xl font-semibold text-gray-800">
-        {title}
-      </h1>
+      <h1 className="text-2xl font-semibold text-gray-800">{title}</h1>
+
+      {children && <div className="text-gray-600 space-y-1">{children}</div>}
 
       <button
         onClick={onClick}
