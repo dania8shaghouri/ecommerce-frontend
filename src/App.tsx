@@ -29,6 +29,8 @@ import OrderProvider from "./context/Order/OrderProvider";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import PaymentCancelPage from "./pages/PaymentCancelPage";
 import ProductFormPage from "./features/admin/pages/admin/ProductFormPage";
+import CustomersPage from "./features/admin/pages/CustomersPage";
+import CustomerDetailPage from "./features/admin/pages/admin/CustomerDetailPage";
 
 function App() {
   return (
@@ -75,6 +77,11 @@ function App() {
                     />
                     <Route path="orders" element={<OrdersPage />} />
                     <Route path="orders/:id" element={<OrderDetailPage />} />
+                    <Route path="customers" element={<CustomersPage />} />
+                    <Route
+                      path="customers/:id"
+                      element={<CustomerDetailPage />}
+                    />
                   </Route>
                 </Route>
               </Routes>
