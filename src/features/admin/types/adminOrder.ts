@@ -54,6 +54,7 @@ export interface AdminOrderFilters {
   startDate?: string;
   endDate?: string;
   sort?: OrderSort;
+  userId?: string;
   page?: number;
   limit?: number;
 }
