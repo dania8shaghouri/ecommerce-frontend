@@ -12,6 +12,7 @@ import { loginSchema, type LoginFormData } from "../validation/loginSchema";
 type LoginResponse = {
   token: string;
   role: "customer" | "admin";
+  firstName: string;
   message: string;
 };
 
@@ -40,7 +41,11 @@ const LoginPage = () => {
         return res.data;
       },
       (data) => {
-        login(form.email, data.token, data.role ?? "customer");
+        login(
+          data.firstName ?? form.email,
+          data.token,
+          data.role ?? "customer",
+        );
 
         if (data.role === "admin") {
           navigate("/admin/dashboard");

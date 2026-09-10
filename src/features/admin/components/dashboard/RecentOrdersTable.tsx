@@ -1,77 +1,75 @@
-type OrderStatus = "Paid" | "Pending" | "Failed";
+import { Link } from "react-router-dom";
+import type { AdminOrder, OrderStatus } from "../../types/adminOrder";
 
-interface Order {
-  id: string;
-  customer: string;
-  status: OrderStatus;
-  total: string;
-  date: string;
+interface Props {
+  orders: AdminOrder[];
 }
 
-const orders: Order[] = [
-  {
-    id: "#1001",
-    customer: "John Doe",
-    status: "Paid",
-    total: "$120",
-    date: "2026-06-15",
-  },
-  {
-    id: "#1002",
-    customer: "Jane Smith",
-    status: "Pending",
-    total: "$80",
-    date: "2026-06-14",
-  },
-  {
-    id: "#1003",
-    customer: "Alex Brown",
-    status: "Failed",
-    total: "$200",
-    date: "2026-06-13",
-  },
-];
-
 const statusStyles: Record<OrderStatus, string> = {
-  Paid: "bg-green-50 text-green-600 border-green-200",
-  Pending: "bg-yellow-50 text-yellow-600 border-yellow-200",
-  Failed: "bg-red-50 text-red-600 border-red-200",
+  pending: "bg-amber-50 text-warning border-amber-200",
+  processing: "bg-blue-50 text-blue-600 border-blue-200",
+  shipped: "bg-purple-50 text-purple-600 border-purple-200",
+  delivered: "bg-emerald-50 text-success border-emerald-200",
+  cancelled: "bg-red-50 text-danger border-red-200",
 };
 
-const RecentOrdersTable = () => {
+const formatLabel = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+const RecentOrdersTable = ({ orders }: Props) => {
   return (
     <div className="bg-white border border-border rounded-2xl p-4 overflow-x-auto w-full">
-      <h2 className="font-semibold mb-4">Recent Orders</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-semibold">Recent Orders</h2>
+        <Link
+          to="/admin/orders"
+          className="text-sm text-primary hover:underline"
+        >
+          View All Orders
+        </Link>
+      </div>
 
-      <table className="w-full text-sm min-w-[600px]">
-        <thead>
-          <tr className="text-left text-gray-500 border-b">
-            <th className="pb-3">Order ID</th>
-            <th className="pb-3">Customer</th>
-            <th className="pb-3">Date</th>
-            <th className="pb-3">Status</th>
-            <th className="pb-3">Total</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {orders.map((o) => (
-            <tr key={o.id} className="border-t hover:bg-gray-50 transition">
-              <td className="py-3 font-medium text-indigo-600">{o.id}</td>
-              <td>{o.customer}</td>
-              <td className="text-gray-500">{o.date}</td>
-              <td>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs border ${statusStyles[o.status]}`}
-                >
-                  {o.status}
-                </span>
-              </td>
-              <td className="font-medium">{o.total}</td>
+      {orders.length === 0 ? (
+        <p className="text-sm text-textSecondary">No orders yet.</p>
+      ) : (
+        <table className="w-full text-sm min-w-[600px]">
+          <thead>
+            <tr className="text-left text-gray-500 border-b">
+              <th className="pb-3">Order ID</th>
+              <th className="pb-3">Customer</th>
+              <th className="pb-3">Total</th>
+              <th className="pb-3">Status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {orders.map((o) => (
+              <tr key={o._id} className="border-t hover:bg-gray-50 transition">
+                <td className="py-3 font-medium">
+                  <Link
+                    to={`/admin/orders/${o._id}`}
+                    className="text-primary hover:underline"
+                  >
+                    #{o.orderNumber}
+                  </Link>
+                </td>
+                <td>
+                  {o.userId
+                    ? `${o.userId.firstName} ${o.userId.lastName}`
+                    : "—"}
+                </td>
+                <td className="font-medium">${o.total.toFixed(2)}</td>
+                <td>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs border ${statusStyles[o.status]}`}
+                  >
+                    {formatLabel(o.status)}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

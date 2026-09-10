@@ -6,30 +6,27 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import type { MonthlyRevenuePoint } from "../../types/adminDashboard";
 
-interface RevenueData {
-  name: string;
-  revenue: number;
+interface Props {
+  data: MonthlyRevenuePoint[];
 }
 
-const data: RevenueData[] = [
-  { name: "Mon", revenue: 400 },
-  { name: "Tue", revenue: 300 },
-  { name: "Wed", revenue: 500 },
-  { name: "Thu", revenue: 200 },
-  { name: "Fri", revenue: 600 },
-];
-
-const RevenueChart = () => {
+const RevenueChart = ({ data }: Props) => {
   return (
     <div className="bg-white border border-border rounded-2xl p-4 h-[320px]">
-      <h2 className="font-semibold mb-4">Revenue Overview</h2>
+      <h2 className="font-semibold mb-4">Sales Overview</h2>
 
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
-          <XAxis dataKey="name" />
+          <XAxis dataKey="month" />
           <YAxis />
-          <Tooltip />
+          <Tooltip
+            formatter={(value) => [
+              `$${Number(value).toLocaleString()}`,
+              "Revenue",
+            ]}
+          />
           <Line
             type="monotone"
             dataKey="revenue"
