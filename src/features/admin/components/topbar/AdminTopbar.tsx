@@ -5,7 +5,9 @@ import { useAuth } from "../../../../context/Auth/AuthContext";
 import { getAdminProducts } from "../../services/adminProductService";
 import { getAdminOrders } from "../../services/adminOrderService";
 import { getAdminCustomers } from "../../services/adminCustomerService";
-
+import { Link } from "react-router-dom";
+import { getAdminNotifications } from "../../services/adminNotificationService";
+import type { AdminNotifications } from "../../types/adminNotification";
 interface Props {
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -28,6 +30,37 @@ const AdminTopbar = ({ setIsSidebarOpen }: Props) => {
   const [isSearching, setIsSearching] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const [notifications, setNotifications] = useState<AdminNotifications | null>(
+    null,
+  );
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const notifRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await getAdminNotifications();
+        setNotifications(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchNotifications();
+    const intervalId = setInterval(fetchNotifications, 60000); // 60 saniyede bir tazele
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setIsNotifOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -185,9 +218,79 @@ const AdminTopbar = ({ setIsSidebarOpen }: Props) => {
           )}
         </div>
 
-        <button className="relative rounded-xl bg-background p-3 transition hover:bg-slate-200">
-          <FiBell size={20} />
-        </button>
+        <div className="relative" ref={notifRef}>
+          <button
+            onClick={() => setIsNotifOpen((prev) => !prev)}
+            className="relative rounded-xl bg-background p-3 transition hover:bg-slate-200"
+          >
+            <FiBell size={20} />
+            {notifications && notifications.totalCount > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-danger text-xs font-medium text-white">
+                {notifications.totalCount}
+              </span>
+            )}
+          </button>
+
+          {isNotifOpen && (
+            <div className="absolute right-0 top-full z-20 mt-2 w-[320px] rounded-xl border border-border bg-white py-2 shadow-dropdown">
+              {!notifications || notifications.totalCount === 0 ? (
+                <p className="px-4 py-3 text-sm text-textSecondary">
+                  No notifications.
+                </p>
+              ) : (
+                <>
+                  {notifications.newOrders.length > 0 && (
+                    <div>
+                      <p className="px-4 pb-1 pt-2 text-xs font-semibold uppercase text-textSecondary">
+                        New Orders
+                      </p>
+                      {notifications.newOrders.map((order) => (
+                        <Link
+                          key={order._id}
+                          to={`/admin/orders/${order._id}`}
+                          onClick={() => setIsNotifOpen(false)}
+                          className="block px-4 py-2 text-sm hover:bg-background"
+                        >
+                          <span className="font-medium text-textPrimary">
+                            #{order.orderNumber}
+                          </span>
+                          <span className="text-textSecondary">
+                            {" "}
+                            — {order.customerName}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+
+                  {notifications.lowStockProducts.length > 0 && (
+                    <div>
+                      <p className="px-4 pb-1 pt-2 text-xs font-semibold uppercase text-textSecondary">
+                        Low Stock
+                      </p>
+                      {notifications.lowStockProducts.map((product) => (
+                        <Link
+                          key={product._id}
+                          to={`/admin/products/${product._id}/edit`}
+                          onClick={() => setIsNotifOpen(false)}
+                          className="block px-4 py-2 text-sm hover:bg-background"
+                        >
+                          <span className="font-medium text-textPrimary">
+                            {product.title}
+                          </span>
+                          <span className="text-warning">
+                            {" "}
+                            — {product.stock} left
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+        </div>
 
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary font-semibold text-white">
           {username ? username.charAt(0).toUpperCase() : "A"}

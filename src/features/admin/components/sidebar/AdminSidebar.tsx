@@ -3,8 +3,8 @@ import {
   FiPackage,
   FiShoppingCart,
   FiUsers,
-  FiBarChart2,
-  FiSettings,
+  // FiBarChart2,
+  // FiSettings,
   FiX,
   FiArrowLeft,
 } from "react-icons/fi";
@@ -21,8 +21,8 @@ const menuItems = [
   { label: "Products", icon: FiPackage, path: "/admin/products" },
   { label: "Orders", icon: FiShoppingCart, path: "/admin/orders" },
   { label: "Customers", icon: FiUsers, path: "/admin/customers" },
-  { label: "Analytics", icon: FiBarChart2, path: "/admin/analytics" },
-  { label: "Settings", icon: FiSettings, path: "/admin/settings" },
+  // { label: "Analytics", icon: FiBarChart2, path: "/admin/analytics" },
+  // { label: "Settings", icon: FiSettings, path: "/admin/settings" },
 ];
 
 const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen }: Props) => {
